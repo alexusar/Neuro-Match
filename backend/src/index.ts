@@ -2,18 +2,31 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import authRouter from './routes/authRoutes';
 
 dotenv.config();
 
 const app = express();
-const PORT = 6969;
+
+// use port from .env file or if not the other one
+const PORT = process.env.PORT || 6969;
 
 app.use(cors());
 app.use(express.json());
 
+
+//API ENDPOINTS
+app.get('/', (req, res) => {res.send('API is live');
+});
+
+app.use('/api/auth', authRouter);
+
+
+
+
+
 //connecting to database through connection string
-const dbURI = 'mongodb+srv://awesomeomsurve:4BXq1l6JPTLdxq4p@cluster2.vlpzm8k.mongodb.net/?retryWrites=true&w=majority&appName=Cluster2';
-mongoose.connect(dbURI)
+mongoose.connect(process.env.MONGO_URI!)
   .then(() => {
     console.log('✅ Connected to MongoDB');
     app.listen(PORT, () => {
@@ -23,6 +36,3 @@ mongoose.connect(dbURI)
   .catch((err) => console.log('MongoDB connection error:', err));
 
 
-  app.get('/', (req, res) => {
-  res.send('API is live');
-});

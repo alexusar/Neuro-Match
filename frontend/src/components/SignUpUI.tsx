@@ -10,10 +10,11 @@ function SignUpUI() {
                 </div>
                 
                 <div className="flex flex-1 flex-col items-center justify-center space-y-2">         
-                    <form action="/api/register" method="POST" className="space-y-4">
-                        <input type="text" name="firstName" placeholder="FirstName" required className="mb-2 p-2 border rounded" />
-                        <input type="text" name="gender" placeholder="Gender" required className="mb-2 p-2 border rounded" />
+                    <form action="http://localhost:6969/api/register" method="POST" className="space-y-4">
                         <input type="text" name="username" placeholder="Username" required className="mb-2 p-2 border rounded" />
+                        <input type="text" name="firstname" placeholder="First Name" required className="mb-2 p-2 border rounded" />
+                        <input type="text" name="lastname" placeholder="Last Name" required className="mb-2 p-2 border rounded" />
+                        <input type="email" name="email" placeholder="Email" required className="mb-2 p-2 border rounded" />
                         <input type="password" name="password" placeholder="Password" required className="mb-2 p-2 border rounded" />                    
                       
                         <button type="submit" className="bg-blue-500 text-white p-2 rounded">Register</button>

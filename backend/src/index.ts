@@ -13,13 +13,14 @@ const PORT = process.env.PORT || 6969;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 //API ENDPOINTS
 app.get('/', (req, res) => {res.send('API is live');
 });
 
-app.use('/api/auth', authRouter);
+app.use('/api', authRouter);
 
 
 

@@ -1,4 +1,4 @@
-import DashBoardUI from '../components/DashBoardUI';
+import DashBoardUI from '../components/DashboardUI';
 
 const DashboardPage = () =>
     {

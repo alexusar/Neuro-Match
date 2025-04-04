@@ -22,7 +22,7 @@ function LoginUI() {
         //if logins successfully, navigate to dashboard
         if (response.status === 200) 
             {
-            navigate('/dashboard');
+            navigate('/moments');
         } 
         else 
         {

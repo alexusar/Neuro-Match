@@ -66,7 +66,7 @@ function LoginUI() {
         </div>
         <div className="register-link mt-4">
             <p>
-            Don't have an account? Also is alex gay?{' '}
+            Don't have an account?{' '}
             <a href="/register" className="text-blue-500">
                 Register 
             </a>

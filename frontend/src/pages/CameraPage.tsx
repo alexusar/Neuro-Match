@@ -1,9 +1,9 @@
-import React from 'react'
+import CameraUI from "../components/CameraUI"
 
 const CameraPage = () => {
   return (
     <div>
-      
+      <CameraUI />
     </div>
   )
 }

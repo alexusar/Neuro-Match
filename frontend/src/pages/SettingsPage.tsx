@@ -1,9 +1,9 @@
-import React from 'react'
+import SettingsUI from "../components/SettingsUI"
 
 const SettingsPage = () => {
   return (
     <div>
-      
+      <SettingsUI />
     </div>
   )
 }

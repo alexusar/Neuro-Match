@@ -6,9 +6,10 @@ function TitleUI() {
     <header className="w-full bg-white shadow-md px-6 py-4 sticky top-0 z-50">
       <div className="flex items-center justify-between">
         <h1 className="text-5xl font-bold text-[#0f172a]">NeuroMatch</h1>
+
         {/* Icons */}
         <div className="flex items-center space-x-6">
-          {/* Home Button */}
+          {/* Moments Button */}
           <button
             onClick={() => navigate("/moments")}
             className="text-[#0f172a] hover:text-[#2563eb] transition"
@@ -20,7 +21,7 @@ function TitleUI() {
                 d="M2.25 12L11.204 3.045a1.125 1.125 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125A1.125 1.125 0 0 0 5.625 21h3.375v-4.875A1.125 1.125 0 0 1 10.125 15h2.25a1.125 1.125 0 0 1 1.125 1.125V21h3.375a1.125 1.125 0 0 0 1.125-1.125V9.75" />
             </svg>
           </button>
-          {/* Calendar Button */}
+          {/* DMs List Button */}
           <button
             onClick={() => navigate("/messaginglist")}
             className="text-[#0f172a] hover:text-[#2563eb] transition"
@@ -35,7 +36,7 @@ function TitleUI() {
                 2.25H5.25A2.25 2.25 0 0 1 3 18.75z" />
             </svg>
           </button>
-          {/* Diet Button */}
+          {/* Dm Button */}
           <button
             onClick={() => navigate("/messaging")}
             className="text-[#0f172a] hover:text-[#2563eb] transition"
@@ -56,7 +57,7 @@ function TitleUI() {
               </g>
             </svg>
           </button>
-          {/* Friends Button */}
+          {/* Camera Button */}
           <button
             onClick={() => navigate("/camera")}
             className="text-[#0f172a] hover:text-[#2563eb] transition"

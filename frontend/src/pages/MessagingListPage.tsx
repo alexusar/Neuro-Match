@@ -1,9 +1,9 @@
-import React from 'react'
+import MessagingListUI from "../components/MessagingListUI"
 
 const MessagingListPage = () => {
   return (
     <div>
-      
+      <MessagingListUI />
     </div>
   )
 }

@@ -1,9 +1,10 @@
-import React from 'react'
+import MessagingUI from "../components/MessagingUI"
 
 const MessagingPage = () => {
   return (
     <div>
-      
+      <MessagingUI />
+
     </div>
   )
 }

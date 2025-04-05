@@ -125,3 +125,24 @@ export const login = async (req: Request, res: Response, next: express.NextFunct
 
 
 }
+
+
+
+//logout functionality
+export const logout = async (req: Request, res: Response, next: express.NextFunction) => {
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 
+            'none' : 'strict',
+        })
+
+        res.json({succes: true, message: "Logged Out"})
+        
+
+    } catch (error: any) {
+        next(error);
+    }
+
+}

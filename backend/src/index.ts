@@ -20,7 +20,16 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {res.send('API is live');
 });
 
-app.use('/api', authRouter);
+app.use('/api/auth', authRouter);
+
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('❌ Error:', err.message);
+  const statusCode = err.status || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
+});
 
 
 

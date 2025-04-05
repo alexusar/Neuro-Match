@@ -13,7 +13,7 @@ function LoginUI() {
     {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:6969/api/login', 
+            const response = await axios.post('http://localhost:6969/api/auth/login', 
             {
                 username,
                 password,

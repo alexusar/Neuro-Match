@@ -19,7 +19,7 @@ function SignUpUI() {
     {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:6969/api/register', 
+            const response = await axios.post('http://localhost:6969/api/auth/register', 
             {
                 username,
                 firstname,

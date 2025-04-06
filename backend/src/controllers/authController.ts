@@ -2,6 +2,9 @@ import express, {Request, Response} from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
+import crypto from 'crypto';
+import { sendVerificationEmail } from '../utils/sendVerificationEmail';
+
 
 
 // async allows other request to be handled, handling the async request in background
@@ -23,6 +26,8 @@ export const register = async (req: Request, res: Response, next: express.NextFu
     if (!username || !firstname || !lastname || !email || !password) {
         res.json({ success: false, message: 'Missing Info' });
         return;
+    
+    
     }
     try {
         //if user alr exists
@@ -35,11 +40,25 @@ export const register = async (req: Request, res: Response, next: express.NextFu
         //hash password, 10 bc the hash function is ran 10 rounds
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        //created hashed verifcation token
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+
+
         //for storing the new hashed password
-        const user = new User({ username, firstname, lastname, email, password: hashedPassword })
+        const user = new User({
+            username,
+            firstname,
+            lastname,
+            email,
+            password: hashedPassword,
+            verificationToken,
+            isVerified: false,
+          });
 
         //saving it to database
         await user.save();
+        await sendVerificationEmail(email, verificationToken);
+
 
         //created token, mongoose automatically creates a id feild to any documented created
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
@@ -58,7 +77,8 @@ export const register = async (req: Request, res: Response, next: express.NextFu
         });
 
         //reistration was completed correctly
-        res.json({success: true});
+        res.json({ success: true, message: 'User registered. Verification email sent.' });
+
 
 
 
@@ -80,27 +100,31 @@ export const register = async (req: Request, res: Response, next: express.NextFu
 export const login = async (req: Request, res: Response, next: express.NextFunction) => {
     const { username, password } = req.body;
 
-    //check if all feilds are filled
     if(!username || !password) {
         res.json({success: false, message: 'username and password required'});
         return;
     }
 
     try {
-
-        //look for user from username
         const user = await User.findOne({username});
         
-        //if username was invalid
         if (!user) {
-            res.json({success: false,message: 'invalid username'});
+            res.json({success: false, message: 'invalid username'});
             return;
         }
 
-        // func to compare entered password and database password
+        // Move verification check before password check
+        if (!user.isVerified) {
+            res.status(403).json({ 
+                success: false, 
+                message: 'Please verify your email before logging in.',
+                requiresVerification: true
+            });
+            return;
+        }
+
         const isSame = await bcrypt.compare(password, user.password);
 
-        //if password was invalid
         if(!isSame) {
             res.json({success: false, message: "invalid password"});
             return;
@@ -115,15 +139,11 @@ export const login = async (req: Request, res: Response, next: express.NextFunct
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        // login was successfull
         res.json({success: true});
-
 
     } catch (error: any) {
         next(error);
     }
-
-
 }
 
 
@@ -146,3 +166,26 @@ export const logout = async (req: Request, res: Response, next: express.NextFunc
     }
 
 }
+
+export const verifyEmail = async (req: Request, res: Response, next: express.NextFunction) => {
+    try {
+        const { token } = req.params;
+        
+        // Find user with matching verification token
+        const user = await User.findOne({ verificationToken: token });
+        
+        if (!user) {
+            res.json({ success: false, message: 'Invalid verification token' });
+            return;
+        }
+
+        // Update user verification status
+        user.isVerified = true;
+        user.verificationToken = ''; // Clear the verification token
+        await user.save();
+        res.redirect('http://localhost:5170/login');
+        
+    } catch (error: any) {
+        next(error);
+    }
+};

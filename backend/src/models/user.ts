@@ -39,6 +39,14 @@ const userSchema = new mongoose.Schema({
       max: Number
     }
   },
+  verificationToken: {
+    type: String,
+    default: null
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },  
   location: String,
   profilePicture: String, // URL to profile picture
   createdAt: {

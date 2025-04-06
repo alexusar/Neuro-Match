@@ -184,8 +184,37 @@ export const verifyEmail = async (req: Request, res: Response, next: express.Nex
         user.verificationToken = ''; // Clear the verification token
         await user.save();
         res.redirect('http://localhost:5170/login');
-        
+
     } catch (error: any) {
         next(error);
+    }
+};
+
+
+
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    if (!token) {
+        res.json({ success: false, msg: 'Not authenticated' });
+        return;
+    }
+
+    try {
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        const user = await User.findById(decoded.id)
+            .select('-password')
+            .populate('friendRequests', 'username firstname lastname')
+            .populate('friends', 'username firstname lastname');
+
+        if (!user) {
+            res.json({ success: false, msg: 'User not found' });
+            return;
+        }
+
+        res.json({ success: true, user });
+    } catch (err) {
+        console.error(err);
+        res.json({ success: false, msg: 'Invalid token' });
     }
 };

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginUI() {
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   //variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +16,7 @@ function LoginUI() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                '/api/auth/login',
+                `${API}/api/auth/login`,
                 {
                     username,
                     password,

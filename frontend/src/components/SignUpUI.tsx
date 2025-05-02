@@ -11,10 +11,12 @@ function SignUpUI() {
 
   const navigate = useNavigate();
 
+  const API = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/register', {
+      const response = await axios.post(`${API}/api/auth/register`, {
         username,
         firstname,
         lastname,
@@ -23,7 +25,7 @@ function SignUpUI() {
       });
 
       if (response.status === 200) {
-        navigate('/login');
+        navigate(`${API}/login`);
       } else {
         alert('Registration failed.');
       }

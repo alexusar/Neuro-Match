@@ -10,6 +10,8 @@ type User = {
     lastname: string;
 };
 
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const FriendNetwork: React.FC = () => {
     const [friendRequests, setFriendRequests] = useState<User[]>([]);
     const [friends, setFriends] = useState<User[]>([]);
@@ -25,7 +27,7 @@ const FriendNetwork: React.FC = () => {
 
     const fetchUserData = async () => {
         try {
-            const res = await axios.get('/api/auth/me', { withCredentials: true });
+            const res = await axios.get(`${API}/api/auth/me`, { withCredentials: true });
             if (res.data.success) {
                 setCurrentUser(res.data.user);
                 setFriendRequests(res.data.user.friendRequests || []);
@@ -43,7 +45,7 @@ const FriendNetwork: React.FC = () => {
         setError('');
         try {
             const response = await axios.get(
-                `/api/friends/search?query=${encodeURIComponent(q)}`,
+                `${API}/api/friends/search?query=${encodeURIComponent(q)}`,
                 { withCredentials: true }
             );
             if (response.data.success) {
@@ -75,7 +77,7 @@ const FriendNetwork: React.FC = () => {
         }
         try {
             const response = await axios.post(
-                '/api/friends/send-request',
+                `${API}/api/friends/send-request`,
                 {
                     userId: currentUser._id,
                     targetId,
@@ -95,11 +97,11 @@ const FriendNetwork: React.FC = () => {
 
     const handleAcceptRequest = async (requesterId: string) => {
         try {
-            const meRes = await axios.get('/api/auth/me', { withCredentials: true });
+            const meRes = await axios.get(`${API}/api/auth/me`, { withCredentials: true });
             const userId = meRes.data.user._id;
 
             const res = await axios.post(
-                '/api/friends/accept-request',
+                `${API}/api/friends/accept-request`,
                 { userId, requesterId },
                 { withCredentials: true }
             );

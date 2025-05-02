@@ -23,14 +23,11 @@ function LoginUI() {
             );
 
         //if logins successfully, navigate to dashboard
-        if (response.status === 200) 
-            {
+        if (response.data.success) {
             navigate('/moments');
-        } 
-        else 
-        {
-            alert('Login failed.');
-        }
+          } else {
+            alert(response.data.message || 'Login failed.');
+          }
         } 
         catch (err) 
         {

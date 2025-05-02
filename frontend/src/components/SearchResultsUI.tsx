@@ -10,6 +10,8 @@ type User = {
     lastname: string;
 };
 
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const SearchResultsUI: React.FC = () => {
     const [query, setQuery] = useState<string>('');
     const [results, setResults] = useState<User[]>([]);
@@ -23,7 +25,7 @@ const SearchResultsUI: React.FC = () => {
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
-                const res = await axios.get('/api/auth/me', { withCredentials: true });
+                const res = await axios.get(`${API}/api/auth/me`, { withCredentials: true });
                 if (res.data.success) {
                     setCurrentUser(res.data.user);
                 }

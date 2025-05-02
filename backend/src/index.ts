@@ -15,7 +15,12 @@ const PORT = process.env.PORT || 6969;
 
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5170',
+    origin:[ 
+
+    "https://neuro-match.com",
+    'http://localhost:5170',
+
+  ],
     credentials: true,
 }));
 app.use(express.json());

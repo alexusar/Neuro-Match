@@ -16,7 +16,7 @@ function TitleUI() {
   };
 
   return (
-    <header className="w-full bg-gradient-to-r from-red-500 to-pink-600 shadow-md px-6 py-4 sticky top-0 z-50 text-white">
+    <header className="w-full bg-gradient-to-r from-black to-pink-600 shadow-md px-6 py-4 sticky top-0 z-50 text-white">
       <div className="flex items-center justify-between">
         <h1 className="text-5xl font-bold">NeuroMatch</h1>
 
@@ -59,7 +59,7 @@ function TitleUI() {
           {/* Navigation Buttons */}
           {[
             { route: "/moments", icon: HomeIcon },
-            { route: "/messaginglist", icon: CalendarIcon },
+            //{ route: "/messaginglist", icon: CalendarIcon },
             { route: "/messaging", icon: DmIcon },
             { route: "/friends", icon: FriendsIcon },
             { route: "/profile", icon: ProfileIcon },
@@ -86,19 +86,17 @@ const HomeIcon = () => (
   </svg>
 );
 
-const CalendarIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={iconStyle}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18.75z" />
-  </svg>
-);
+// const CalendarIcon = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={iconStyle}>
+//     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18.75z" />
+//   </svg>
+// );
 
 const DmIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 50 50" className={iconStyle}>
-    <g>
-      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M40.15 28.26c-7.05 7.05-19.72 10.58-25.36 4.94-5.64-5.64-2.1-18.31 4.94-25.36 7.05-7.05 14.94-5.8 20.58-0.16 5.64 5.64 6.89 13.53-0.16 20.58Z" strokeWidth="3" />
-      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M12.86 30.25l-3.02 4.23c-.36.5-1.09.55-1.64.28-.48-.24-1.02-.37-1.59-.37-1.99 0-3.61 1.62-3.61 3.61 0 1.62 1.06 2.98 2.53 3.44.49.15.89.55 1.04 1.04.36 1.2 1.73 2.26 3.35 2.26 1.99 0 3.61-1.62 3.61-3.61 0-.57-.13-1.11-.37-1.59-.27-.55-.22-1.28.28-1.64l4.23-3.03" strokeWidth="3" />
-    </g>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={iconStyle}>
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
   </svg>
+
 );
 
 const FriendsIcon = () => (

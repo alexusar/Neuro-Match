@@ -37,8 +37,11 @@ function LoginUI() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-          <div className="login-form bg-white p-8 rounded-xl shadow-lg">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 pt-0">
+          
+          <h1 className="text-5xl font-extrabold mb-23 text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-800">NeuroMatch</h1>
+
+          <div className="login-form bg-white p-9 rounded-xl shadow-lg w-[28rem]">
             <h1 className="text-4xl font-bold mb-4 text-center text-gray-800">Login</h1>
             <form onSubmit={handleSubmit} className="flex flex-col">
               <input

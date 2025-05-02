@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
+    },
   age: Number,
   bio: String,
   gender: String,
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
     ageRange: {
       min: Number,
       max: Number
-    }
+      }
   },
   verificationToken: {
     type: String,
@@ -48,7 +48,19 @@ const userSchema = new mongoose.Schema({
     default: false
   },  
   location: String,
-  profilePicture: String, // URL to profile picture
+    profilePicture: String, // URL to profile picture
+    friends: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    friendRequests: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
   createdAt: {
     type: Date,
     default: Date.now

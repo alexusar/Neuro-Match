@@ -11,8 +11,6 @@ import MessagingPage from './pages/MessagingPage';
 import MessagingListPage from './pages/MessagingListPage';
 import MomentsPage from './pages/MomentsPage';
 import CameraPage from './pages/CameraPage';
-import FriendPage from './pages/FriendPage';
-import SearchResultsPage from './pages/SearchResultsPage';
 
 
 function App() {
@@ -29,8 +27,6 @@ function App() {
         <Route path="/messaginglist" element={<MessagingListPage />} />
         <Route path="/moments" element={<MomentsPage />} />
         <Route path="/camera" element={<CameraPage />} />
-        <Route path="/friends" element={<FriendPage />} />
-        <Route path="/search" element={<SearchResultsPage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   </Router>

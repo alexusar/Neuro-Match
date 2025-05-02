@@ -1,62 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
 
 function TitleUI() {
-    const navigate = useNavigate();
-    const [searchOpen, setSearchOpen] = useState(false);
-    const [query, setQuery] = useState("");
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            if (query.trim()) {
-                // Navigate to the search results page with the query as a URL parameter
-                navigate(`/search?query=${encodeURIComponent(query)}`);
-            }
-        }
-    };
-
+  const navigate = useNavigate();
   return (
-  <header className="w-full bg-white shadow-md px-6 py-4 sticky top-0 z-50">
-    <div className="flex items-center justify-between">
+    <header className="w-full bg-white shadow-md px-6 py-4 sticky top-0 z-50">
+      <div className="flex items-center justify-between">
         <h1 className="text-5xl font-bold text-[#0f172a]">NeuroMatch</h1>
+
         {/* Icons */}
         <div className="flex items-center space-x-6">
-            {/* Search */}
-            <div className="relative">
-                <button
-                    onClick={() => setSearchOpen(!searchOpen)}
-                    className="text-[#0f172a] hover:text-[#2563eb] transition"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-8 h-8"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21 21l-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z"
-                        />
-                    </svg>
-                </button>
-                {searchOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white border rounded shadow-lg p-2 z-50">
-                       <input
-                            type="text"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Search friend"
-                            className="w-full p-2 border rounded mb-2"
-                        />
-                    </div>
-                )}
-            </div>
           {/* Moments Button */}
           <button
             onClick={() => navigate("/moments")}
@@ -107,7 +59,7 @@ function TitleUI() {
           </button>
           {/* Camera Button */}
           <button
-            onClick={() => navigate("/friends")}
+            onClick={() => navigate("/camera")}
             className="text-[#0f172a] hover:text-[#2563eb] transition"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

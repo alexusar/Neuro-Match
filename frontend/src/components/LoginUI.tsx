@@ -13,14 +13,11 @@ function LoginUI() {
     {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                'http://localhost:6969/api/auth/login',
-                {
-                    username,
-                    password,
-                },
-                { withCredentials: true }
-            );
+            const response = await axios.post('http://localhost:6969/api/auth/login', 
+            {
+                username,
+                password,
+            });
 
         //if logins successfully, navigate to dashboard
         if (response.status === 200) 

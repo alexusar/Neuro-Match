@@ -23,7 +23,7 @@ const SearchResultsUI: React.FC = () => {
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
-                const res = await axios.get('http://localhost:6969/api/auth/me', { withCredentials: true });
+                const res = await axios.get('/api/auth/me', { withCredentials: true });
                 if (res.data.success) {
                     setCurrentUser(res.data.user);
                 }
@@ -49,7 +49,7 @@ const SearchResultsUI: React.FC = () => {
         setError('');
         try {
             const response = await axios.get(
-                `http://localhost:6969/api/friends/search?query=${encodeURIComponent(q)}`,
+                `/api/friends/search?query=${encodeURIComponent(q)}`,
                 { withCredentials: true }
             );
             if (response.data.success) {
@@ -82,7 +82,7 @@ const SearchResultsUI: React.FC = () => {
         }
         try {
             const response = await axios.post(
-                'http://localhost:6969/api/friends/send-request',
+                '/api/friends/send-request',
                 {
                     userId: currentUser._id,
                     targetId,

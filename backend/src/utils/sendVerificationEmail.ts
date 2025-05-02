@@ -11,7 +11,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     },
   });
 
-  const verificationLink = `http://localhost:6969/api/auth/verify/${token}`; // Update port if different
+  const verificationLink = `/api/auth/verify/${token}`; // Update port if different
 
   await transporter.sendMail({
     from: `"Neuro-Match App" <${process.env.EMAIL_USER}>`,

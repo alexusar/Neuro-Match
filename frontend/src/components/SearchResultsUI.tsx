@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import TitleUI from './TitleUI';
 
 type User = {
     _id: string;
@@ -101,6 +102,7 @@ const SearchResultsUI: React.FC = () => {
 
     return (
         <div className="container p-4">
+            <TitleUI />
             <h1 className="text-3xl font-bold mb-4">Search Users</h1>
             <form onSubmit={handleSearch} className="mb-4">
                 <input

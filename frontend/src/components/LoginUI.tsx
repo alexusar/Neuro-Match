@@ -37,43 +37,43 @@ function LoginUI() {
     };
 
     return (
-        <div className="login-container">
-        <div className="login-form">
-            <h1 className="text-4xl font-bold mb-4">Login</h1>
-            <form onSubmit={handleSubmit}>
-            <input
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+          <div className="login-form bg-white p-8 rounded-xl shadow-lg">
+            <h1 className="text-4xl font-bold mb-4 text-center text-gray-800">Login</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col">
+              <input
                 type="text"
                 name="username"
                 placeholder="Username"
                 required
-                className="mb-2 p-2 border rounded"
+                className="mb-2 p-2 border border-gray-300 rounded"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
+              />
+              <input
                 type="password"
                 name="password"
                 placeholder="Password"
                 required
-                className="mb-2 p-2 border rounded"
+                className="mb-4 p-2 border border-gray-300 rounded"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+              />
+              <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition">
                 Login
-            </button>
+              </button>
             </form>
+            <div className="register-link mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                Don't have an account?{' '}
+                <a href="/register" className="text-purple-300 hover:text-purple-200 font-medium">
+                  Register
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="register-link mt-4">
-            <p>
-            Don't have an account?{' '}
-            <a href="/register" className="text-blue-500">
-                Register 
-            </a>
-            </p>
-        </div>
-    </div>
-  );
-}
+      );
+    }
 
 export default LoginUI;

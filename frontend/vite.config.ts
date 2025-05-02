@@ -10,5 +10,11 @@ export default defineConfig({
   ],
   server: {
     port: 5170, 
+    host: '0.0.0.0', // allows access from browser outside WSL
+    watch: 
+    {
+      usePolling: true, // important for WSL
+      interval: 100,    
+    },
   },
 })

@@ -1,14 +1,169 @@
-import TitleUI from "./TitleUI";
+import React, { useState, useEffect, useRef } from 'react';
+import TitleUI from './TitleUI';
+import { io, Socket } from 'socket.io-client';
 
-function MessagingUI() {
-  return (
-    <div className="flex flex-col h-screen bg-[#f8fafc]">
-      <TitleUI />
-      <div className="flex-grow flex items-center justify-center">
-        <h1 className="text-3xl font-bold text-[#0f172a]">Messaging UI</h1>
-      </div>
-    </div>
-  );
-}   
+const API = import.meta.env.VITE_API_BASE_URL;
+
+interface User {
+    _id: string;
+    username: string;
+    firstname: string;
+    lastname: string;
+}
+
+interface Message {
+    _id: string;
+    senderId: string;
+    recipientId: string;
+    text: string;
+    createdAt: string;
+}
+
+const MessagingUI: React.FC = () => {
+    const [userId, setUserId] = useState<string>('');
+    const [friends, setFriends] = useState<User[]>([]);
+    const [selectedFriend, setSelectedFriend] = useState<User | null>(null);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState<string>('');
+    const socketRef = useRef<Socket | null>(null);
+
+    // Initialize socket and fetch current user/friends on mount
+    useEffect(() => {
+        // fetch current user info
+        fetch(`${API}/api/auth/me`, { credentials: 'include' })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    setUserId(data.user._id);
+                    setFriends(data.user.friends);
+                }
+            });
+
+        // connect socket.io
+        const socket = io(`${API}`, {
+            withCredentials: true,
+        });
+        socketRef.current = socket;
+
+        // listen for incoming messages
+        socket.on('receive_message', (msg: Message) => {
+            // only add messages for current conversation
+            if (
+                selectedFriend &&
+                (msg.senderId === selectedFriend._id || msg.recipientId === selectedFriend._id)
+            ) {
+                setMessages((prev) => [...prev, msg]);
+            }
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [selectedFriend]);
+
+    // Join the room for the selected friend
+    useEffect(() => {
+        if (!selectedFriend || !userId || !socketRef.current) return;
+
+        // room name based on sorted IDs
+        const room = [userId, selectedFriend._id].sort().join('_');
+        socketRef.current.emit('join_room', room);
+
+        // fetch existing messages via REST
+        fetch(`${API}/api/messages?with=${selectedFriend._id}`, {
+            credentials: 'include',
+        })
+            .then((res) => res.json())
+            .then((data) => setMessages(data));
+    }, [selectedFriend, userId]);
+
+    // Send a new message via socket
+    const handleSendMessage = () => {
+        if (!selectedFriend || !newMessage.trim() || !socketRef.current) return;
+
+        const msgData = {
+            senderId: userId,
+            recipientId: selectedFriend._id,
+            text: newMessage.trim(),
+        };
+
+        // emit to server
+        socketRef.current.emit('send_message', msgData);
+        setNewMessage('');
+    };
+
+    return (
+        <div className="flex flex-col h-screen">
+            {/* Title Header */}
+            <TitleUI />
+
+            <div className="flex flex-1">
+                {/* Friends List */}
+                <div className="w-1/3 border-r border-gray-200 p-4 overflow-y-auto">
+                    <h2 className="text-xl font-semibold mb-4">Friends</h2>
+                    {friends.map((friend) => (
+                        <button
+                            key={friend._id}
+                            onClick={() => setSelectedFriend(friend)}
+                            className={`w-full text-left px-4 py-2 mb-2 rounded ${selectedFriend?._id === friend._id ? 'bg-blue-100' : 'hover:bg-gray-100'
+                                }`}
+                        >
+                            {friend.firstname} {friend.lastname}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Chat Window */}
+                <div className="w-2/3 flex flex-col p-4">
+                    {selectedFriend ? (
+                        <>
+                            <div className="flex-1 overflow-y-auto mb-4 flex flex-col">
+                                {messages.map((msg) => (
+                                    <div
+                                        key={msg._id}
+                                        className={`mb-2 p-2 rounded max-w-xs ${msg.senderId === selectedFriend._id
+                                                ? 'bg-gray-200 self-start'
+                                                : 'bg-blue-500 text-white self-end'
+                                            }`}
+                                    >
+                                        {msg.text}
+                                        <div className="text-xs text-gray-500 mt-1">
+                                            {new Date(msg.createdAt).toLocaleTimeString()}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex">
+                                <input
+                                    type="text"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleSendMessage();
+                                    }}
+                                    className="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none"
+                                    placeholder="Type a message..."
+                                />
+                                <button
+                                    onClick={handleSendMessage}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600"
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex-1 flex items-center justify-center text-gray-500">
+                            Select a friend to start chatting
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default MessagingUI;
+
+
+

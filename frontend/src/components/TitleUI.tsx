@@ -1,64 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 function TitleUI() {
   const navigate = useNavigate();
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState("");
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (query.trim()) {
-        navigate(`/search?query=${encodeURIComponent(query)}`);
-      }
-    }
-  };
+ 
 
   return (
     <header className="w-full bg-gradient-to-r from-black to-pink-600 shadow-md px-6 py-4 sticky top-0 z-50 text-white">
       <div className="flex items-center justify-between">
         <h1 className="text-5xl font-bold">NeuroMatch</h1>
 
-        <div className="flex items-center space-x-6">
-          {/* Search */}
-          <div className="relative">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="hover:text-pink-200 transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-8 h-8"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-4.35-4.35M16.65 10.5a6.15 6.15 0 1 1-12.3 0 6.15 6.15 0 0 1 12.3 0z"
-                />
-              </svg>
-            </button>
-            {searchOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border rounded shadow-lg p-2 z-50">
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Search friend"
-                  className="w-full p-2 border rounded mb-2"
-                />
-              </div>
-            )}
-          </div>
-
+        
+          <div className="flex items-center space-x-6">
           {/* Navigation Buttons */}
           {[
             { route: "/moments", icon: HomeIcon },
+            { route: "/aichat", icon: AIChatIcon },
             //{ route: "/messaginglist", icon: CalendarIcon },
             { route: "/messaging", icon: DmIcon },
             { route: "/friends", icon: FriendsIcon },
@@ -86,11 +42,11 @@ const HomeIcon = () => (
   </svg>
 );
 
-// const CalendarIcon = () => (
-//   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={iconStyle}>
-//     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18.75z" />
-//   </svg>
-// );
+const AIChatIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={iconStyle}>
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+  </svg>
+);
 
 const DmIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className={iconStyle}>

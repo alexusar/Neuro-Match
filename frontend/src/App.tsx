@@ -13,6 +13,7 @@ import MomentsPage from './pages/MomentsPage';
 import CameraPage from './pages/CameraPage';
 import FriendPage from './pages/FriendPage';
 import SearchResultsPage from './pages/SearchResultsPage';
+import AIChat from './pages/AIChat';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/camera" element={<CameraPage />} />
         <Route path="/friends" element={<FriendPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
+        <Route path="/aichat" element={<AIChat />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   </Router>

@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginUI() {
 
-  // const API = import.meta.env.VITE_API_BASE_URL;
-  const API = "";  
+   const API = import.meta.env.VITE_API_BASE_URL; 
 
   //variables for username and password
   const [username, setUsername] = useState('');

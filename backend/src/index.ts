@@ -58,7 +58,13 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 // ─── Wrap with HTTP + Socket.IO ───────────────────────────────────────────────
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: { origin: 'https://neuro-match.com', credentials: true }
+  cors: {
+    origin: [
+      'http://localhost:5170',
+      'https://www.neuro-match.com'
+    ],
+    credentials: true
+  }
 });
 
 // ─── Socket.IO Logic ──────────────────────────────────────────────────────────

@@ -14,6 +14,7 @@ import CameraPage from './pages/CameraPage';
 import FriendPage from './pages/FriendPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import AIChat from './pages/AIChat';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/friends" element={<FriendPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/aichat" element={<AIChat />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   </Router>

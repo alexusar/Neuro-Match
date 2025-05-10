@@ -1,11 +1,15 @@
-import express, {Request, Response} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '../utils/sendVerificationEmail';
 
-
+// Type for the request with user data
+interface AuthRequest extends Request {
+    userId?: string;
+    currentUser?: any;
+}
 
 // async allows other request to be handled, handling the async request in background
 // await pauses code untill the promise is resolved
@@ -19,16 +23,18 @@ import { sendVerificationEmail } from '../utils/sendVerificationEmail';
 
 
 //register functionality 
-export const register = async (req: Request, res: Response, next: express.NextFunction) => {
+export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username, firstname, lastname, email, password } = req.body;
 
-    //check if all feilds are filled
+    // Validate required fields
     if (!username || !firstname || !lastname || !email || !password) {
-        res.json({ success: false, message: 'Missing Info' });
+        res.status(400).json({ 
+            success: false, 
+            message: 'All fields are required' 
+        });
         return;
-    
-    
     }
+
     try {
         //if user alr exists
         const existingUser = await User.findOne({ email })
@@ -97,7 +103,7 @@ export const register = async (req: Request, res: Response, next: express.NextFu
 
 
 //login functionality 
-export const login = async (req: Request, res: Response, next: express.NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username, password } = req.body;
 
     if(!username || !password) {
@@ -149,7 +155,7 @@ export const login = async (req: Request, res: Response, next: express.NextFunct
 
 
 //logout functionality
-export const logout = async (req: Request, res: Response, next: express.NextFunction) => {
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         res.clearCookie('token', {
             httpOnly: true,
@@ -167,7 +173,7 @@ export const logout = async (req: Request, res: Response, next: express.NextFunc
 
 }
 
-export const verifyEmail = async (req: Request, res: Response, next: express.NextFunction) => {
+export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { token } = req.params;
         
@@ -175,7 +181,10 @@ export const verifyEmail = async (req: Request, res: Response, next: express.Nex
         const user = await User.findOne({ verificationToken: token });
         
         if (!user) {
-            res.json({ success: false, message: 'Invalid verification token' });
+            res.status(400).json({ 
+                success: false, 
+                message: 'Invalid verification token' 
+            });
             return;
         }
 
@@ -183,17 +192,26 @@ export const verifyEmail = async (req: Request, res: Response, next: express.Nex
         user.isVerified = true;
         user.verificationToken = ''; // Clear the verification token
         await user.save();
-        res.redirect('http://localhost:5170/login');
+
+        // Return success response
+        res.status(200).json({ 
+            success: true, 
+            message: 'Email verified successfully' 
+        });
 
     } catch (error: any) {
-        next(error);
+        console.error('Email verification error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to verify email' 
+        });
     }
 };
 
 
 
 
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
     const token = req.cookies.token;
     if (!token) {
         res.json({ success: false, msg: 'Not authenticated' });

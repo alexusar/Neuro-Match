@@ -3,10 +3,11 @@ import { register, login, logout, getCurrentUser, verifyEmail } from '../control
 
 const authRouter = express.Router();
 
-authRouter.post('/register', register);
-authRouter.post('/login', login);
-authRouter.post('/logout', logout);
-authRouter.get('/me', getCurrentUser);
-authRouter.get('/verify/:token', verifyEmail);
+// Route handlers
+authRouter.post('/register', (req, res, next) => register(req, res, next));
+authRouter.post('/login', (req, res, next) => login(req, res, next));
+authRouter.post('/logout', (req, res, next) => logout(req, res, next));
+authRouter.get('/me', (req, res) => getCurrentUser(req, res));
+authRouter.get('/verify/:token', (req, res, next) => verifyEmail(req, res, next));
 
 export default authRouter;

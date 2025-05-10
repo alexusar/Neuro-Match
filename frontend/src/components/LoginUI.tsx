@@ -9,11 +9,13 @@ function LoginUI() {
   //variables for username and password
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => 
     {
         e.preventDefault();
+        setError('');
         try {
             const response = await axios.post(
                 `${API}/api/auth/login`,
@@ -28,13 +30,17 @@ function LoginUI() {
         if (response.data.success) {
             navigate('/moments');
           } else {
-            alert(response.data.message || 'Login failed.');
+            setError(response.data.message || 'Login failed.');
           }
         } 
-        catch (err) 
+        catch (err: any) 
         {
-            console.error(err);
-            alert('Wrong username or password.');
+            console.error('Login error:', err);
+            if (err.response?.status === 403 && err.response?.data?.requiresVerification) {
+                setError('Please verify your email before logging in. Check your inbox for the verification link.');
+            } else {
+                setError(err.response?.data?.message || 'Wrong username or password.');
+            }
         }
     };
 
@@ -45,6 +51,11 @@ function LoginUI() {
 
           <div className="login-form bg-white p-9 rounded-xl shadow-lg w-[28rem]">
             <h1 className="text-4xl font-bold mb-4 text-center text-gray-800">Login</h1>
+            {error && (
+                <div className="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
+                    {error}
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="flex flex-col">
               <input
                 type="text"

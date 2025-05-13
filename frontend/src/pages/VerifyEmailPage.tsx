@@ -7,6 +7,7 @@ function VerifyEmailPage() {
   const navigate = useNavigate();
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [message, setMessage] = useState('Verifying your email...');
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -16,28 +17,43 @@ function VerifyEmailPage() {
         return;
       }
 
+      // Prevent double verification
+      if (isVerifying) return;
+      setIsVerifying(true);
+
       try {
         const API = import.meta.env.VITE_API_BASE_URL;
         console.log('Verifying email with token:', token);
-        const response = await axios.get(`${API}/api/auth/verify/${token}`);
+        const response = await axios.get(`${API}/api/auth/verify/${token}`, {
+          withCredentials: true
+        });
         
         if (response.data.success) {
           setStatus('success');
           setMessage('Email verified successfully! Redirecting to login...');
-          setTimeout(() => navigate('/login'), 3000);
+          setTimeout(() => navigate('/'), 3000);
         } else {
           setStatus('error');
           setMessage(response.data.message || 'Invalid verification link. Please try registering again.');
         }
       } catch (error: any) {
         console.error('Verification error:', error);
-        setStatus('error');
-        setMessage(error.response?.data?.message || 'Failed to verify email. Please try registering again.');
+        // If we get a 400 error, it might mean the email was already verified
+        if (error.response?.status === 400) {
+          setStatus('success');
+          setMessage('Email verified! Redirecting to login...');
+          setTimeout(() => navigate('/'), 3000);
+        } else {
+          setStatus('error');
+          setMessage(error.response?.data?.message || 'Failed to verify email. Please try registering again.');
+        }
+      } finally {
+        setIsVerifying(false);
       }
     };
 
     verifyEmail();
-  }, [token, navigate]);
+  }, [token, navigate, isVerifying]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">

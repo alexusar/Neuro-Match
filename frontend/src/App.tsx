@@ -34,10 +34,10 @@ function App() {
         <Route path="/friends" element={<FriendPage />} />
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/aichat" element={<AIChat />} />
-        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-  </Router>
+        <Route path="/verify/:token" element={<VerifyEmailPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   )
 }
 

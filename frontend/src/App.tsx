@@ -12,7 +12,6 @@ import MessagingListPage from './pages/MessagingListPage';
 import MomentsPage from './pages/MomentsPage';
 import CameraPage from './pages/CameraPage';
 import FriendPage from './pages/FriendPage';
-import SearchResultsPage from './pages/SearchResultsPage';
 import AIChat from './pages/AIChat';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 
@@ -32,7 +31,6 @@ function App() {
         <Route path="/moments" element={<MomentsPage />} />
         <Route path="/camera" element={<CameraPage />} />
         <Route path="/friends" element={<FriendPage />} />
-        <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/verify/:token" element={<VerifyEmailPage />} />
         <Route path="*" element={<Navigate to="/" />} />

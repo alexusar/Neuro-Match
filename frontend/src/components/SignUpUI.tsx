@@ -24,8 +24,8 @@ function SignUpUI() {
         password,
       });
 
-      if (response.status === 200) {
-        navigate(`${API}/login`);
+      if (response.status === 200 || response.status === 201) {
+        navigate('/login');
       } else {
         alert('Registration failed.');
       }

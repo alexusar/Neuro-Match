@@ -39,7 +39,7 @@ const MomentsUI = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-500 to-purple-600">
       <TitleUI />
       {/* Moments Header */}
       <div className="w-full bg-white border-b border-gray-200 py-4 px-6">

@@ -50,7 +50,7 @@ const AIChatUI = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-500 to-purple-600">
       <TitleUI />
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages

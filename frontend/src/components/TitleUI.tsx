@@ -5,7 +5,7 @@ function TitleUI() {
  
 
   return (
-    <header className="w-full bg-gradient-to-r from-black to-pink-600 shadow-md px-6 py-4 sticky top-0 z-50 text-white">
+    <header className="w-full border-b border-black shadow-md px-6 py-4 sticky top-0 z-50 text-white">
       <div className="flex items-center justify-between">
         <h1 className="text-5xl font-bold">NeuroMatch</h1>
 

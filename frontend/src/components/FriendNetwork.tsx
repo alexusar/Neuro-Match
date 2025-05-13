@@ -130,82 +130,94 @@ const FriendNetwork: React.FC = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div>
-            <TitleUI />
-
-            {/* Search Bar */}
-            <div className="p-4">
-                <h1 className="text-3xl font-bold mb-4">Search Users</h1>
-                <form onSubmit={handleSearch} className="mb-4">
-                    <input
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Enter search query"
-                        className="border rounded p-2 mr-2"
-                    />
-                    <button type="submit" className="bg-blue-500 text-white px-3 py-2 rounded">
-                        Search
-                    </button>
-                </form>
-                {searching && <p>Loading...</p>}
-                {error && <p className="text-red-500">{error}</p>}
-                <ul>
-                    {results.map((user) => (
-                        <li key={user._id} className="mb-2 border-b pb-2 flex items-center justify-between">
-                            <div>
-                                <p className="font-semibold">
-                                    {user.firstname} {user.lastname} (@{user.username})
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => handleSendFriendRequest(user._id)}
-                                className="bg-green-500 text-white px-2 py-1 rounded ml-2"
-                            >
-                                Add Friend
-                            </button>
-                        </li>
-                    ))}
+        <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 text-gray-800">
+          <TitleUI />
+      
+          {/* Container */}
+          <div className="max-w-3xl mx-auto p-6">
+      
+            {/* Search Section */}
+            <section className="bg-white rounded-lg shadow p-6 mb-6">
+              <h1 className="text-3xl font-bold mb-4 text-purple-800">🔍 Search Users</h1>
+              <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Enter username or name..."
+                  className="flex-1 p-2 border border-gray-300 rounded"
+                />
+                <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded">
+                  Search
+                </button>
+              </form>
+              {searching && <p className="mt-2 text-sm text-gray-500">Searching...</p>}
+              {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+      
+              {results.length > 0 && (
+                <ul className="mt-4 space-y-3">
+                  {results.map((user) => (
+                    <li key={user._id} className="flex items-center justify-between border-b pb-2">
+                      <div>
+                        <p className="font-medium">{user.firstname} {user.lastname}</p>
+                        <p className="text-sm text-gray-500">@{user.username}</p>
+                      </div>
+                      <button
+                        onClick={() => handleSendFriendRequest(user._id)}
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                      >
+                        Add Friend
+                      </button>
+                    </li>
+                  ))}
                 </ul>
-            </div>
-
-            {/* Friend Requests */}
-            <div className="p-4">
-                <h2 className="text-2xl font-bold mb-2">Friend Requests</h2>
-                {friendRequests.length === 0 ? (
-                    <p>No friend requests</p>
-                ) : (
-                    friendRequests.map((user) => (
-                        <div key={user._id} className="flex items-center justify-between bg-gray-100 p-2 my-1 rounded">
-                            <div>
-                                <p className="font-semibold">{user.firstname} {user.lastname}</p>
-                                <p className="text-sm text-gray-600">@{user.username}</p>
-                            </div>
-                            <button
-                                onClick={() => handleAcceptRequest(user._id)}
-                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                            >
-                                Accept
-                            </button>
-                        </div>
-                    ))
-                )}
-
-                {/* Current Friends */}
-                <h2 className="text-2xl font-bold mt-6 mb-2">Current Friends</h2>
-                {friends.length === 0 ? (
-                    <p>No friends yet</p>
-                ) : (
-                    friends.map((user) => (
-                        <div key={user._id} className="bg-gray-100 p-2 my-1 rounded">
-                            <p className="font-semibold">{user.firstname} {user.lastname}</p>
-                            <p className="text-sm text-gray-600">@{user.username}</p>
-                        </div>
-                    ))
-                )}
-            </div>
+              )}
+            </section>
+      
+            {/* Friend Requests Section */}
+            <section className="bg-white rounded-lg shadow p-6 mb-6">
+              <h2 className="text-2xl font-bold text-blue-700 mb-4">📬 Friend Requests</h2>
+              {friendRequests.length === 0 ? (
+                <p className="text-gray-500">You have no pending friend requests.</p>
+              ) : (
+                <div className="space-y-3">
+                  {friendRequests.map((user) => (
+                    <div key={user._id} className="flex items-center justify-between bg-gray-100 p-3 rounded">
+                      <div>
+                        <p className="font-medium">{user.firstname} {user.lastname}</p>
+                        <p className="text-sm text-gray-600">@{user.username}</p>
+                      </div>
+                      <button
+                        onClick={() => handleAcceptRequest(user._id)}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+                      >
+                        Accept
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+      
+            {/* Friends List */}
+            <section className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-2xl font-bold text-green-700 mb-4">👥 Current Friends</h2>
+              {friends.length === 0 ? (
+                <p className="text-gray-500">You don't have any friends yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {friends.map((user) => (
+                    <div key={user._id} className="bg-gray-50 p-3 rounded border">
+                      <p className="font-medium">{user.firstname} {user.lastname}</p>
+                      <p className="text-sm text-gray-500">@{user.username}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
         </div>
-    );
-};
+      );
+    };
 
 export default FriendNetwork;

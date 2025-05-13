@@ -93,77 +93,118 @@ const MessagingUI: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen">
-            {/* Title Header */}
-            <TitleUI />
+        <div className="flex flex-col h-screen bg-gradient-to-br from-blue-500 to-purple-600">
+          <TitleUI />
+      
+          {/* Background color selector */}
+          <div className="p-2  border-b flex items-center gap-4">
+            <label className="text-sm font-medium">Chat Background:</label>
 
-            <div className="flex flex-1">
-                {/* Friends List */}
-                <div className="w-1/3 border-r border-gray-200 p-4 overflow-y-auto">
-                    <h2 className="text-xl font-semibold mb-4">Friends</h2>
-                    {friends.map((friend) => (
-                        <button
-                            key={friend._id}
-                            onClick={() => setSelectedFriend(friend)}
-                            className={`w-full text-left px-4 py-2 mb-2 rounded ${selectedFriend?._id === friend._id ? 'bg-blue-100' : 'hover:bg-gray-100'
-                                }`}
-                        >
-                            {friend.firstname} {friend.lastname}
-                        </button>
-                    ))}
-                </div>
+            {/* Color Picker */}
+            <input
+                type="color"
+                defaultValue="#ffffff"
+                onChange={(e) => {
+                const chat = document.getElementById('chat-scroll');
+                if (chat) {
+                    chat.className = "flex-1 overflow-y-auto mb-4 flex flex-col rounded p-4";
+                    chat.style.backgroundColor = e.target.value;
+                }
+                }}
+                className="w-8 h-8 p-0 border cursor-pointer rounded"
+                title="Pick a color"
+            />
 
-                {/* Chat Window */}
-                <div className="w-2/3 flex flex-col p-4">
-                    {selectedFriend ? (
-                        <>
-                            <div className="flex-1 overflow-y-auto mb-4 flex flex-col">
-                                {messages.map((msg) => (
-                                    <div
-                                        key={msg._id}
-                                        className={`mb-2 p-2 rounded max-w-xs ${msg.senderId === selectedFriend._id
-                                                ? 'bg-gray-200 self-start'
-                                                : 'bg-blue-500 text-white self-end'
-                                            }`}
-                                    >
-                                        {msg.text}
-                                        <div className="text-xs text-gray-500 mt-1">
-                                            {new Date(msg.createdAt).toLocaleTimeString()}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex">
-                                <input
-                                    type="text"
-                                    value={newMessage}
-                                    onChange={(e) => setNewMessage(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') handleSendMessage();
-                                    }}
-                                    className="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none"
-                                    placeholder="Type a message..."
-                                />
-                                <button
-                                    onClick={handleSendMessage}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600"
-                                >
-                                    Send
-                                </button>
-                            </div>
-                        </>
-                    ) : (
-                        <div className="flex-1 flex items-center justify-center text-gray-500">
-                            Select a friend to start chatting
-                        </div>
-                    )}
-                </div>
+            {/* Rainbow Button */}
+            <button
+                onClick={() => {
+                const chat = document.getElementById('chat-scroll');
+                if (chat) {
+                    chat.style.backgroundColor = '';
+                    chat.className = "flex-1 overflow-y-auto mb-4 flex flex-col rounded p-4 bg-gradient-to-br from-pink-400 via-yellow-300 to-blue-400";
+                }
+                }}
+                className="bg-gradient-to-r from-pink-400 via-yellow-300 to-blue-400 text-white font-medium px-3 py-1 rounded shadow hover:brightness-105"
+            >
+                🌈 Rainbow
+            </button>
             </div>
+
+      
+          <div className="flex flex-1 overflow-hidden">
+            {/* Friends List */}
+            <div className="w-1/3 border-r border-gray-200 p-4 overflow-y-auto">
+              <h2 className="text-xl font-semibold mb-4">Friends</h2>
+              {friends.map((friend) => (
+                <button
+                  key={friend._id}
+                  onClick={() => setSelectedFriend(friend)}
+                  className={`w-full text-left px-4 py-2 mb-2 rounded ${
+                    selectedFriend?._id === friend._id ? 'bg-blue-100' : 'hover:bg-gray-100'
+                  }`}
+                >
+                  {friend.firstname} {friend.lastname}
+                </button>
+              ))}
+            </div>
+      
+            {/* Chat Window */}
+            <div className="w-2/3 flex flex-col p-4">
+              {selectedFriend ? (
+                <>
+                  {/* Chat Messages */}
+                  <div
+                    id="chat-scroll"
+                    className="flex-1 overflow-y-auto mb-4 flex flex-col rounded p-4"
+                    style={{ backgroundColor: '#ffffff' }} // default
+                  >
+                    {messages.map((msg) => (
+                      <div
+                        key={msg._id}
+                        className={`mb-2 p-2 rounded max-w-xs ${
+                          msg.senderId === selectedFriend._id
+                            ? 'bg-gray-200 self-start'
+                            : 'bg-blue-500 text-white self-end'
+                        }`}
+                      >
+                        {msg.text}
+                        <div className="text-xs text-gray-500 mt-1">
+                          {new Date(msg.createdAt).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+      
+                  {/* Message Input */}
+                  <div className="flex">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSendMessage();
+                      }}
+                      className="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none"
+                      placeholder="Type a message..."
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-gray-500">
+                  Select a friend to start chatting
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-    );
+      );
+      
 };
 
 export default MessagingUI;
-
-
-

@@ -236,3 +236,36 @@ export const getCurrentUser = async (req: Request, res: Response): Promise<void>
         res.json({ success: false, msg: 'Invalid token' });
     }
 };
+
+
+
+export const updateProfile = async (
+    req: AuthRequest,
+    res: Response
+) => {
+    try {
+        // We assume your requireAuth middleware has attached the full user doc to req.currentUser
+        const userId = req.currentUser._id;
+
+        // Pull only the fields we allow them to update
+        const { age, pronouns, bio, profilePicture, gender, height, preferences } = req.body;
+
+        // Find-and-update, returning the new document
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { age, pronouns, bio, profilePicture, gender, height, preferences },
+            { new: true, runValidators: true }
+        ).select('-password'); // omit sensitive fields
+
+        if (!updatedUser) {
+            res.status(404).json({ success: false, msg: 'User not found' });
+            return;
+        }
+
+        // Return the updated user record
+        res.json({ success: true, user: updatedUser });
+    } catch (err) {
+        console.error('Error updating profile:', err);
+        res.status(500).json({ success: false, msg: 'Server error' });
+    }
+};

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import 'keen-slider/keen-slider.min.css';
 import { useKeenSlider } from 'keen-slider/react';
 import { useEffect } from 'react';
+import logo from '../assets/logo.png';
+import { FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
 
 const images = [
   {
@@ -51,20 +53,39 @@ function HomeUI() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-700 to-blue-400 text-white">
+      
       {/* Top Navigation */}
-      <div className="flex justify-end items-center px-6 py-4 bg-transparent">
-        <button
-          onClick={() => navigate("/login")}
-          className="bg-white text-blue-600 font-semibold px-4 py-2 rounded mr-4 hover:bg-gray-100"
-        >
-          Log In
-        </button>
-        <button
-          onClick={() => navigate("/register")}
-          className="bg-white text-purple-600 font-semibold px-4 py-2 rounded hover:bg-gray-100"
-        >
-          Sign Up
-        </button>
+      <div className="flex justify-between items-center px-6 py-4 bg-white rounded-full">
+        
+        {/* Logo */}
+        <img
+          src={logo}
+          alt="NeuroMatch Logo"
+          className="h-20 w-auto"
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate("/")}
+        />
+
+        {/* Center title */}
+        <div className="flex-center text-5xl bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text font-bold">
+          <h1> NeuroMatch</h1>
+        </div>
+
+        {/* Move to the right, login and signup buttons */}
+        <div className="flex space-x-4 text-2xl">
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-white text-blue-600 font-semibold px-4 py-2 rounded mr-4 hover:bg-gray-100"
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => navigate("/register")}
+            className="bg-white text-purple-600 font-semibold px-4 py-2 rounded hover:bg-gray-100"
+          >
+            Sign Up
+          </button>
+        </div>
       </div>
 
       {/* Hero Section */}
@@ -77,7 +98,7 @@ function HomeUI() {
 
       {/* About Us */}
       <div className="px-6 md:px-20 py-8">
-        <div className="bg-white text-gray-900 p-6 rounded-lg shadow-md">
+        <div className="bg-white text-gray-900 p-6 rounded-b-4xl shadow-md">
           <h2 className="text-2xl font-bold mb-2">About Us</h2>
           <p>
             NeuroMatch is an innovative dating platform that uses cutting-edge AI to create deep and meaningful matches. Our mission is to prioritize emotional compatibility and safety in the online dating world.
@@ -151,9 +172,61 @@ function HomeUI() {
       </div>
 
       {/* Footer */}
-      <div className="bg-purple-600 text-center text-sm py-4">
-        © {new Date().getFullYear()} NeuroMatch. All rights reserved.
-      </div>
+     <footer className="bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-200 px-6 py-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+          
+          {/* Company */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Company</h3>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:text-purple-600">About Us</a></li>
+              <li><a href="#" className="hover:text-purple-600">Blog</a></li>
+              <li><a href="#" className="hover:text-purple-600">Careers</a></li>
+              <li><a href="#" className="hover:text-purple-600">Contact Us</a></li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Support</h3>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:text-purple-600">Help Center</a></li>
+              <li><a href="#" className="hover:text-purple-600">Safety Center</a></li>
+              <li><a href="#" className="hover:text-purple-600">Community Guidelines</a></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Legal</h3>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:text-purple-600">Cookies Policy</a></li>
+              <li><a href="#" className="hover:text-purple-600">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-purple-600">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-purple-600">Law Enforcement</a></li>
+            </ul>
+          </div>
+
+          {/* App Downloads */}
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Install App</h3>
+            <div className="space-y-2">
+              <img src="https://via.placeholder.com/150x50?text=App+Store" alt="App Store" className="w-36" />
+              <img src="https://via.placeholder.com/150x50?text=Google+Play" alt="Google Play" className="w-36" />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center mt-10 border-t pt-6 border-gray-300 text-sm">
+          <p>© {new Date().getFullYear()} NeuroMatch. All rights reserved.</p>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <a href="#" className="hover:text-purple-600"><FaTwitter size={20} /></a>
+            <a href="#" className="hover:text-purple-600"><FaYoutube size={20} /></a>
+            <a href="#" className="hover:text-purple-600"><FaInstagram size={20} /></a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

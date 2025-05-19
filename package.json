@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@huggingface/inference": "^3.12.1",
+    "keen-slider": "^6.8.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "socket.io-client": "^4.8.1"

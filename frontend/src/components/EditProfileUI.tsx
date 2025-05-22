@@ -287,7 +287,7 @@ const ProfileUI: React.FC = () => {
                         {/* Profile picture with Edit overlay */}
                         <div className="relative inline-block mx-auto">
                             <img
-                                src={profilePicture || '/placeholder.png'}
+                                src={profilePicture ? `${API}${profilePicture}` : '/placeholder.png'}
                                 alt="Profile"
                                 className="w-48 h-48 rounded-full object-cover"
                             />

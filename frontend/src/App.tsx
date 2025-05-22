@@ -15,7 +15,7 @@ import CameraPage from './pages/CameraPage';
 import FriendPage from './pages/FriendPage';
 import AIChat from './pages/AIChat';
 import VerifyEmailPage from './pages/VerifyEmailPage';
-
+import EditProfilePage from './pages/EditProfilePage';
 
 function App() {
 
@@ -36,6 +36,7 @@ function App() {
         <Route path="/aichat" element={<AIChat />} />
         <Route path="/verify/:token" element={<VerifyEmailPage />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
       </Routes>
     </Router>
   )

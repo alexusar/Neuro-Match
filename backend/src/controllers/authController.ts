@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import crypto from 'crypto';
@@ -240,32 +242,65 @@ export const getCurrentUser = async (req: Request, res: Response): Promise<void>
 
 
 export const updateProfile = async (
-    req: AuthRequest,
-    res: Response
-) => {
-    try {
-        // We assume your requireAuth middleware has attached the full user doc to req.currentUser
-        const userId = req.currentUser._id;
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    // 1) Grab the logged-in user’s ID from your auth middleware:
+    const userId = req.currentUser!._id;
 
-        // Pull only the fields we allow them to update
-        const { age, pronouns, bio, profilePicture, gender, height, preferences } = req.body;
+    // 2) Pull only the fields you allow the client to change:
+    const { age, pronouns, bio, profilePicture, gender, height, preferences } =
+      req.body;
 
-        // Find-and-update, returning the new document
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { age, pronouns, bio, profilePicture, gender, height, preferences },
-            { new: true, runValidators: true }
-        ).select('-password'); // omit sensitive fields
+    // 3) Initialize your updates object so TS knows it exists:
+    const updates: any = { age, pronouns, bio, gender, height, preferences };
 
-        if (!updatedUser) {
-            res.status(404).json({ success: false, msg: 'User not found' });
-            return;
-        }
+    // 4) If it’s a Data-URL, decode & save it to /uploads:
+    if (
+      typeof profilePicture === 'string' &&
+      profilePicture.startsWith('data:')
+    ) {
+      const matches = profilePicture.match(
+        /^data:(.+)\/(.+);base64,(.+)$/
+      );
+      if (matches) {
+        const ext = matches[2];       // e.g. "jpeg" or "png"
+        const data = matches[3];      // the raw base64 payload
+        const buffer = Buffer.from(data, 'base64');
+        const filename = `${userId}-${Date.now()}.${ext}`;
+        const filepath = path.join(
+          __dirname,
+          '../../uploads',
+          filename
+        );
+        fs.writeFileSync(filepath, buffer);
 
-        // Return the updated user record
-        res.json({ success: true, user: updatedUser });
-    } catch (err) {
-        console.error('Error updating profile:', err);
-        res.status(500).json({ success: false, msg: 'Server error' });
+        // 5) Point your user record at the new static URL:
+        updates.profilePicture = `/uploads/${filename}`;
+      }
     }
+    // 6) Otherwise if they passed a plain URL, just use that:
+    else if (typeof profilePicture === 'string') {
+      updates.profilePicture = profilePicture;
+    }
+
+    // 7) Run the update in one shot and return the updated user:
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updates,
+      { new: true, runValidators: true }
+    )
+      .select('-password');
+
+    if (!updatedUser) {
+      res.status(404).json({ success: false, msg: 'User not found' });
+      return;
+    }
+
+    res.json({ success: true, user: updatedUser });
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    res.status(500).json({ success: false, msg: 'Server error' });
+  }
 };

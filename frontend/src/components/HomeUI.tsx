@@ -55,24 +55,25 @@ function HomeUI() {
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-700 to-blue-400 text-white">
       
       {/* Top Navigation */}
-      <div className="flex justify-between items-center px-6 py-4 bg-white rounded-full">
-        
-        {/* Logo */}
-        <img
-          src={logo}
-          alt="NeuroMatch Logo"
-          className="h-20 w-auto"
-          style={{ cursor: 'pointer' }}
-          onClick={() => navigate("/")}
-        />
+      <div className="grid grid-cols-3 items-center px-6 py-4 bg-white rounded-full">
 
-        {/* Center title */}
-        <div className="flex-center text-5xl bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text font-bold">
-          <h1> NeuroMatch</h1>
+        {/* Left: Logo */}
+        <div>
+          <img
+            src={logo}
+            alt="NeuroMatch Logo"
+            className="h-20 w-auto cursor-pointer"
+            onClick={() => navigate("/")}
+          />
         </div>
 
-        {/* Move to the right, login and signup buttons */}
-        <div className="flex space-x-4 text-2xl">
+        {/* Center: Title */}
+        <div className="text-center text-5xl bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text font-bold">
+          NeuroMatch
+        </div>
+
+        {/* Right: Buttons */}
+        <div className="flex justify-end space-x-4 text-2xl">
           <button
             onClick={() => navigate("/login")}
             className="bg-white text-blue-600 font-semibold px-4 py-2 rounded mr-4 hover:bg-gray-100"
@@ -87,6 +88,7 @@ function HomeUI() {
           </button>
         </div>
       </div>
+
 
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center text-center py-20 px-6">

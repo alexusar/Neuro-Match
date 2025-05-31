@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import User from '../models/user';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '../utils/sendVerificationEmail';
@@ -241,62 +242,77 @@ export const getCurrentUser = async (req: Request, res: Response): Promise<void>
 
 
 
-export const updateProfile = async (
-  req: AuthRequest,
-  res: Response
-): Promise<void> => {
+export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    // 1) Grab the logged-in user�s ID from your auth middleware:
+    // 1) Grab the logged-in user’s ID (in your auth middleware, you probably set `req.currentUser`)
     const userId = req.currentUser!._id;
 
-    // 2) Pull only the fields you allow the client to change:
-    const { age, pronouns, bio, profilePicture, gender, height, preferences } =
-      req.body;
+    // 2) Pull out just the fields you want to allow changing:
+    const { age, pronouns, bio, profilePicture, gender, height, preferences } = req.body;
 
-    // 3) Initialize your updates object so TS knows it exists:
+    // 3) Build an "updates" object; TS knows these fields exist now:
     const updates: any = { age, pronouns, bio, gender, height, preferences };
 
-    // 4) If it�s a Data-URL, decode & save it to /uploads:
-    if (
-      typeof profilePicture === 'string' &&
-      profilePicture.startsWith('data:')
-    ) {
-      const matches = profilePicture.match(
-        /^data:(.+)\/(.+);base64,(.+)$/
-      );
+    /**
+     * 4) If profilePicture is a base64 Data-URL, decode and save to GridFS instead of disk.
+     *    GridFS will store the file in the “uploads.files” & “uploads.chunks” collections.
+     *    We will then store `/api/users/media/<fileId>` in the user record.
+     */
+    if (typeof profilePicture === 'string' && profilePicture.startsWith('data:')) {
+      // Extract MIME type (e.g. "image/png" or "image/jpeg") and the actual Base64 data
+      const matches = profilePicture.match(/^data:(.+)\/(.+);base64,(.+)$/);
       if (matches) {
-        const ext = matches[2];       // e.g. "jpeg" or "png"
-        const data = matches[3];      // the raw base64 payload
-        const buffer = Buffer.from(data, 'base64');
-        const filename = `${userId}-${Date.now()}.${ext}`;
-        const filepath = path.join(
-          __dirname,
-          '../../uploads',
-          filename
-        );
-        fs.writeFileSync(filepath, buffer);
+        const mimeMain = matches[1];  // e.g. "image"
+        const mimeSub = matches[2];   // e.g. "png" or "jpeg"
+        const base64Data = matches[3];
+        const buffer = Buffer.from(base64Data, 'base64');
 
-        // 5) Point your user record at the new static URL:
-        updates.profilePicture = `/uploads/${filename}`;
+        // Create a GridFSBucket (bucketName "uploads" to match your posts)
+        const db = mongoose.connection.db!;
+        const bucket = new mongoose.mongo.GridFSBucket(db, {
+          bucketName: 'uploads',            // You can also choose "profilePics" but reusing "uploads" is fine
+        });
+
+        // Give the stored file a filename (purely metadata; not the URL)
+        const filenameOnGridFS = `${userId}-${Date.now()}.${mimeSub}`;
+        const uploadStream = bucket.openUploadStream(filenameOnGridFS, {
+          contentType: `${mimeMain}/${mimeSub}`,  // e.g. "image/png"
+        });
+
+        // Write buffer into GridFS, then close the stream
+        uploadStream.end(buffer);
+
+        // Once “finish” fires, uploadStream.id is the new ObjectId of the stored file
+        await new Promise<void>((resolve, reject) => {
+          uploadStream.on('finish', () => {
+            resolve();
+          });
+          uploadStream.on('error', (err) => {
+            console.error('GridFS error saving profile picture:', err);
+            reject(err);
+          });
+        });
+
+        // Retrieve the new file’s ObjectId
+        const fileId = uploadStream.id as mongoose.Types.ObjectId;
+
+        // Build a URL that your front-end will use to fetch/stream that image:
+        // We will create a route GET /api/users/media/:fileId below, so:
+        updates.profilePicture = `/api/auth/media/:fileId`;
       }
     }
-    // 6) Otherwise if they passed a plain URL, just use that:
+    // 5) Otherwise, if they already passed a URL string (e.g. they pasted a link),
+    //    just store it exactly so the front-end can show it
     else if (typeof profilePicture === 'string') {
       updates.profilePicture = profilePicture;
     }
 
-    // 7) Run the update in one shot and return the updated user:
+    // 6) Now update the User in one shot, and return the updated user
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       updates,
       { new: true, runValidators: true }
-    )
-      .select('-password');
-
-    if (!updatedUser) {
-      res.status(404).json({ success: false, msg: 'User not found' });
-      return;
-    }
+    ).select('-password');
 
     res.json({ success: true, user: updatedUser });
   } catch (err) {

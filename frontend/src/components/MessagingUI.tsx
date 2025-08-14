@@ -16,6 +16,7 @@ interface Message {
     senderId: string;
     recipientId: string;
     text: string;
+    momentId?: string;
     createdAt: string;
 }
 
@@ -161,13 +162,36 @@ const MessagingUI: React.FC = () => {
                     {messages.map((msg) => (
                       <div
                         key={msg._id}
-                        className={`mb-2 p-2 rounded max-w-xs ${
+                        className={`mb-2 p-2 rounded ${msg.momentId ? 'max-w-sm' : 'max-w-xs'} ${
                           msg.senderId === selectedFriend._id
                             ? 'bg-gray-200 self-start'
                             : 'bg-blue-500 text-white self-end'
                         }`}
                       >
                         {msg.text}
+                        {msg.momentId && (
+                          <div className="mt-3 rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+                            <div className="bg-black relative" style={{ paddingBottom: '177.77%' }}>
+                              <video 
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={`${API}/api/moments/video/${msg.momentId}`}
+                                controls
+                                poster={`${API}/api/moments/thumbnail/${msg.momentId}`}
+                                playsInline
+                              />
+                            </div>
+                            <div className="p-2.5 flex items-center justify-between bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                              <span className="text-sm font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Shared Moment
+                              </span>
+                              <span className="text-xs opacity-80">Tap to play</span>
+                            </div>
+                          </div>
+                        )}
                         <div className="text-xs text-gray-500 mt-1">
                           {new Date(msg.createdAt).toLocaleTimeString()}
                         </div>

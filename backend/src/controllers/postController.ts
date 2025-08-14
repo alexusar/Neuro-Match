@@ -17,6 +17,20 @@ export const getMyPosts = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
+export const getPostsByUserId = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) {
+      return res.status(400).json({ success: false, msg: 'Missing userId' });
+    }
+    const posts = await Post.find({ userId }).sort({ createdAt: -1 });
+    res.json({ success: true, posts });
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ success: false, msg: 'Could not load posts' });
+  }
+};
+
 /**
  * POST /api/posts
  * (multipart/form-data w/ a single “media” field)

@@ -148,7 +148,18 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        res.json({success: true});
+        res.json({ 
+            success: true, 
+            user: {
+              _id: user._id,
+              username: user.username,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.email,
+              //avatar: user.avatar || null // optional, if you store it
+            }
+          });
+          
 
     } catch (error: any) {
         next(error);

@@ -31,12 +31,13 @@ router.post(
     requireAuth,
     async (req: AuthenticatedRequest, res: Response) => {
         const meId = req.currentUser!._id;
-        const { recipientId, text } = req.body;
+        const { recipientId, text, momentId } = req.body;
 
         const msg = await Message.create({
             senderId: meId,
             recipientId,
-            text
+            text,
+            momentId
         });
 
         res.status(201).json(msg);

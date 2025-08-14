@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user'; // adjust path as needed
 
-// Extend Express Request to include our auth fields
 export interface AuthenticatedRequest extends Request {
   userId?: string;
   currentUser?: any; // Optionally replace `any` with your User document interface
+  file?: Express.Multer.File;
 }
 
 // Middleware to require authentication and attach currentUser

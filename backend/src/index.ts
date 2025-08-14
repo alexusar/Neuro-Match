@@ -9,6 +9,9 @@ import { Server, Socket } from 'socket.io';
 import authRouter from './routes/authRoutes';
 import friendRouter from './routes/friendRoutes';
 import messagesRouter from './routes/messageRoutes';
+import momentRoutes from './routes/momentRoutes';
+import userRoutes from './routes/userRoutes';
+
 import Message from './models/message';
 import postRouter from './routes/postRoutes';
 
@@ -20,6 +23,7 @@ interface MessagePayload {
     senderId: string;
     recipientId: string;
     text: string;
+    momentId?: string;
 }
 
 // use port from .env file or if not the other one
@@ -49,6 +53,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/friends', friendRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/moments', momentRoutes);
+app.use('/api/users', userRoutes);
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('❌ Error:', err.message);

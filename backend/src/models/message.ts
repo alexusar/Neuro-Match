@@ -15,6 +15,11 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    momentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Moment',
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

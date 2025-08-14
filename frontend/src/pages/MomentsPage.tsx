@@ -1,11 +1,10 @@
+import React from 'react';
 import MomentsUI from "../components/MomentsUI"
 
-const MomentsPage = () => {
+const MomentsPage: React.FC = () => {
   return (
-    <div>
+    <div className="h-screen w-full">
       <MomentsUI />
-      <h1 className="text-4xl font-bold mb-4">Moments</h1>
-      <p className="text-lg">Welcome to the Moments page!</p>
     </div>
   )
 }

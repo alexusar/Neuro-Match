@@ -21,8 +21,11 @@ export const createMoment = async (req: AuthenticatedRequest, res: Response) => 
   try {
     const { videoUrl, caption } = req.body;
     const userId = req.userId;
+    
+    // Provide default description if AI analysis isn't ready
+    const description = req.body.description || null;
 
-    const newMoment = new Moment({ videoUrl, caption, userId });
+    const newMoment = new Moment({ videoUrl, caption, description, userId });
     await newMoment.save();
 
     // Fetch the moment again, populated

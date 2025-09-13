@@ -75,14 +75,9 @@ const MomentVideo: React.FC<MomentVideoProps> = ({
     };
   }, []);
 
-  // Add this just before return in MomentVideo
-console.log('MomentVideo - user:', user);
-console.log('MomentVideo - momentUsername:', user?.username);
-
-
   return (
-    <div ref={containerRef} className="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl relative">
-      <div className="w-[360px] h-[86vh] relative flex flex-col rounded-2xl overflow-hidden bg-black shadow-xl border border-gray-800">
+    <div ref={containerRef} className="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-lg shadow-2xl relative px-0.5 sm:px-1">
+      <div className="w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:max-w-[340px] h-[87vh] relative flex flex-col rounded-lg overflow-hidden bg-black shadow-xl">
         {/* Video Area */}
         <div className="flex-1 relative group">
           <video

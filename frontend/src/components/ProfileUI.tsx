@@ -125,6 +125,23 @@ const ProfileUI: React.FC = () => {
         }
     };
 
+    // Add logout function
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${API}/api/auth/logout`, {}, { withCredentials: true });
+            // Clear user data from localStorage
+            localStorage.removeItem('user');
+            // Navigate to login page
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Even if API call fails, clear local data and redirect
+            localStorage.removeItem('user');
+            navigate('/login');
+        }
+        setMenuOpen(false);
+    };
+
     return (
         <div className="w-full min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 shadow-md">
             <TitleUI />
@@ -145,7 +162,7 @@ const ProfileUI: React.FC = () => {
                             <MoreVertical className="w-6 h-6" />
                         </button>
                         {menuOpen && (
-                            <div className="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg py-1">
+                            <div className="absolute right-0 mt-2 w-32 bg-white rounded shadow-lg py-1 z-50">
                                 <button
                                     onClick={() => {
                                         navigate('/profile/edit');
@@ -163,6 +180,12 @@ const ProfileUI: React.FC = () => {
                                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
                                 >
                                     Settings
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                                >
+                                    Logout
                                 </button>
                             </div>
                         )}

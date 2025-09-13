@@ -178,13 +178,12 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
             'none' : 'strict',
         })
 
-        res.json({succes: true, message: "Logged Out"})
+        res.json({success: true, message: "Logged Out"})  // Fixed: "success" not "succes"
         
 
     } catch (error: any) {
         next(error);
     }
-
 }
 
 export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

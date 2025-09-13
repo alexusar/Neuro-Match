@@ -41,7 +41,6 @@ const MomentSidebar: React.FC<MomentSidebarProps> = ({
 
   const navigate = useNavigate();
   const hasLiked = localLikes.includes(userId);
-  console.log('MomentSidebar props:', { momentId, userId, momentUsername, likes, comments });
   
   // Fetch friends when send modal is opened
   useEffect(() => {

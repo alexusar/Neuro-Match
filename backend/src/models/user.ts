@@ -98,6 +98,20 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
+  userInterests: [
+        {
+            type: String,
+            trim: true
+        }
+    ],
+
+  momentInterests: [
+        {
+            type: String,
+            trim: true
+        }
+    ],
+
   createdAt: {
         type: Date,
         default: Date.now

@@ -8,14 +8,12 @@ if (!API) {
 
 export const fetchMoments = async () => {
   try {
-    console.log('Fetching moments from:', `${API}/api/moments`);
     const response = await axios.get(`${API}/api/moments`, { 
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
       }
     });
-    console.log('Moments API response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching moments:', error);

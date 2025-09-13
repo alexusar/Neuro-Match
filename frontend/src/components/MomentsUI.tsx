@@ -30,38 +30,30 @@ const MomentsUI: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
-  // 🔍 Debug: render + storage check
-  console.log('👀 MomentsUI component rendered');
 
   useEffect(() => {
     const loadMoments = async () => {
       try {
         setLoading(true);
 
-        // ✅ Load user from localStorage
+        // Load user from localStorage
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
           try {
             const parsedUser = JSON.parse(storedUser);
             if (parsedUser && parsedUser._id) {
               setCurrentUser(parsedUser._id);
-              console.log('✅ Parsed user ID:', parsedUser._id);
-            } else {
-              console.warn('⚠️ Parsed user object has no _id:', parsedUser);
             }
           } catch (e) {
-            console.error('❌ Failed to parse localStorage user:', e);
+            console.error('Failed to parse localStorage user:', e);
           }
-        } else {
-          console.warn('⚠️ No user found in localStorage');
         }
 
-        // ✅ Fetch moments
+        // Fetch moments
         const data = await fetchMoments();
-        console.log('📦 Fetched moments:', data);
         setMoments(data);
       } catch (err) {
-        console.error('❌ Failed to load moments:', err);
+        console.error('Failed to load moments:', err);
         setError('Failed to load moments. Please try again later.');
       } finally {
         setLoading(false);
@@ -76,7 +68,7 @@ const MomentsUI: React.FC = () => {
       const data = await fetchMoments();
       setMoments(data);
     } catch (err) {
-      console.error('❌ Failed to refresh moments:', err);
+      console.error('Failed to refresh moments:', err);
       setError('Failed to refresh moments. Please try again later.');
     }
   };
@@ -113,23 +105,24 @@ const MomentsUI: React.FC = () => {
       <TitleUI />
       <div className="flex-1 overflow-y-scroll snap-y snap-mandatory">
         {moments.map((moment, index) => {
-          console.log('moment.userId:', moment.userId);
           return (
             <div
               key={moment._id}
-              className="h-[90vh] snap-start flex items-center justify-center"
+              className="h-[90vh] snap-start flex items-center justify-center px-2 sm:px-4 md:px-6 lg:px-8"
             >
-              <MomentVideo
-                videoUrl={moment.videoUrl}
-                showOverlay={index === 0}
-                momentId={moment._id}
-                userId={currentUser}
-                likes={moment.likes}
-                comments={moment.comments}
-                onUpdate={handleUpdate}
-                user={moment.userId}
-                description={moment.caption}
-              />
+              <div className="w-full max-w-screen-sm flex justify-center">
+                <MomentVideo
+                  videoUrl={moment.videoUrl}
+                  showOverlay={index === 0}
+                  momentId={moment._id}
+                  userId={currentUser}
+                  likes={moment.likes}
+                  comments={moment.comments}
+                  onUpdate={handleUpdate}
+                  user={moment.userId}
+                  description={moment.caption}
+                />
+              </div>
             </div>
           );
         })}

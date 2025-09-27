@@ -12,6 +12,9 @@ import messagesRouter from './routes/messageRoutes';
 import momentRoutes from './routes/momentRoutes';
 import userRoutes from './routes/userRoutes';
 
+import chatRouter from './routes/chat';
+
+
 import Message from './models/message';
 import postRouter from './routes/postRoutes';
 
@@ -55,6 +58,9 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/moments', momentRoutes);
 app.use('/api/users', userRoutes);
+
+app.use('/api/chat', chatRouter);
+
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('❌ Error:', err.message);

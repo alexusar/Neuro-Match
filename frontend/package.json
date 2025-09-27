@@ -16,6 +16,7 @@
     "date-fns": "^4.1.0",
     "keen-slider": "^6.8.6",
     "lucide-react": "^0.511.0",
+    "openai": "^5.20.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-easy-crop": "^5.4.1",
